@@ -3,9 +3,26 @@ header {
     height: 70px;
     width: 100%;
     border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 header .logo {
     background: url("../images/logo.png") no-repeat;
-    left: 20px;
+    margin-left: 20px;
     height: 100%;
+    width: 142px;
+}
+
+header #api_status {
+    margin-right: 30px;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background-color: #CCCCCC;
+}
+
+.available {
+    background-color: #ff545f !important;
 }
