@@ -16,7 +16,7 @@ $(document).ready(function () {
   });
 
 // Checks api status
-  $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/status/', function (data) {
+  $.get('http://0.0.0.0:5001/api/v1/status/', function (data) {
     if (data.status === 'OK') {
       $('#api_status').addClass('available');
     } else {
@@ -26,14 +26,14 @@ $(document).ready(function () {
 
 // This loads in everything using only the api
   $.ajax({
-    url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
+    url: 'http://0.0.0.0:5001/api/v1/places_search/',
     type: 'POST',
     data: '{}',
     contentType: 'application/json',
     dataType: 'json',
     async: false,
     success: function (places) {
-      $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/users/', function (users) {
+      $.get('http://0.0.0.0:5001/api/v1/users/', function (users) {
         for (const place of places) {
           const user = users.filter(user => {
             return user.id === place.user_id;
@@ -64,13 +64,13 @@ $(document).ready(function () {
     console.log("hello");
     $('.places > article').remove();
     $.ajax({
-      url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
+      url: 'http://0.0.0.0:5001/api/v1/places_search/',
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({ amenities: checkedAmenities }),
       success: function (data) {
-        $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/users/', function (users) {
+        $.get('http://0.0.0.0:5001/api/v1/users/', function (users) {
           for (const place of data) {
             const user = users.filter(user => {
               return user.id === place.user_id;
