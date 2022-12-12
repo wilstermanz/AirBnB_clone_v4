@@ -1,26 +1,21 @@
 // Lists checked amenities
-$(function () {
+$(document).ready(function () {
   const checkedAmenities = [];
-  const checkedAmenitiesDict = {};
   const names = [];
   $('li :checkbox').change(function () {
     if (this.checked) {
       checkedAmenities.push($(this).attr('data-id'));
       names.push($(this).attr('data-name'));
-      checkedAmenitiesDict[$(this).attr('data-id')] = $(this).attr('data-name');
     } else {
       const indexID = names.indexOf($(this).attr('data-id'));
       const indexName = names.indexOf($(this).attr('data-name'));
       checkedAmenities.splice(indexID, 1);
       names.splice(indexName, 1);
-      delete checkedAmenitiesDict[$(this).attr('data-id')];
     }
     $('.amenities h4').html(names.join(', '));
   });
-});
 
 // Checks api status
-$(function () {
   $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/status/', function (data) {
     if (data.status === 'OK') {
       $('#api_status').addClass('available');
@@ -28,10 +23,8 @@ $(function () {
       $('#api_status').removeClass('available');
     }
   });
-});
 
 // This loads in everything using only the api
-$(document).ready(function() {
   $.ajax({
     url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
     type: 'POST',
@@ -66,22 +59,19 @@ $(document).ready(function() {
       });
     }
   });
-});
-
 // This loads in everything with checked amenities using only the api
-$(document).ready(function() {
-  $('button').on("click", function () {
+  $('button').on('click', function () {
+    console.log("hello");
     $('.places > article').remove();
     $.ajax({
       url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
       type: 'POST',
-      data: JSON.stringify({ amenities: Object.keys(checkedAmenitiesDict) }),
-      contentType: 'application/json',
       dataType: 'json',
-      async: false,
-      success: function (places) {
+      contentType: 'application/json',
+      data: JSON.stringify({ amenities: checkedAmenities }),
+      success: function (data) {
         $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/users/', function (users) {
-          for (const place of places) {
+          for (const place of data) {
             const user = users.filter(user => {
               return user.id === place.user_id;
             })[0];
@@ -101,10 +91,8 @@ $(document).ready(function() {
             <div class="description">
               ${place.description}
             </div>
-          </article>`);
-          }
-        });
-      }
-    });
+          </article>`);}
+        })
+      }})
   });
 });
