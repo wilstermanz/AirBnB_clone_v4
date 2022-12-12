@@ -1,16 +1,19 @@
 // Lists checked amenities
 $(function () {
   const checkedAmenities = [];
+  const checkedAmenitiesDict = {};
   const names = [];
   $('li :checkbox').change(function () {
     if (this.checked) {
       checkedAmenities.push($(this).attr('data-id'));
       names.push($(this).attr('data-name'));
+      checkedAmenitiesDict[$(this).attr('data-id')] = $(this).attr('data-name');
     } else {
       const indexID = names.indexOf($(this).attr('data-id'));
       const indexName = names.indexOf($(this).attr('data-name'));
       checkedAmenities.splice(indexID, 1);
       names.splice(indexName, 1);
+      delete checkedAmenitiesDict[$(this).attr('data-id')];
     }
     $('.amenities h4').html(names.join(', '));
   });
@@ -27,7 +30,7 @@ $(function () {
   });
 });
 
-// This loads in everything uing only the api
+// This loads in everything using only the api
 $(document).ready(function() {
   $.ajax({
     url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
@@ -62,5 +65,46 @@ $(document).ready(function() {
         }
       });
     }
+  });
+});
+
+// This loads in everything with checked amenities using only the api
+$(document).ready(function() {
+  $('button').on("click", function () {
+    $('.places > article').remove();
+    $.ajax({
+      url: 'http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/places_search/',
+      type: 'POST',
+      data: JSON.stringify({ amenities: Object.keys(checkedAmenitiesDict) }),
+      contentType: 'application/json',
+      dataType: 'json',
+      async: false,
+      success: function (places) {
+        $.get('http://4e1277e2f5ec.654b0ff2.hbtn-cod.io:5001/api/v1/users/', function (users) {
+          for (const place of places) {
+            const user = users.filter(user => {
+              return user.id === place.user_id;
+            })[0];
+            $('.places').append(`<article>
+            <div class="title_box">
+              <h2>${place.name}</h2>
+              <div class="price_by_night">$${place.price_by_night}</div>
+            </div>
+            <div class="information">
+              <div class="max_guest">${place.max_guest} Guest${place.max_guest !== 1 ? 's' : ''}</div>
+              <div class="number_rooms">${place.number_rooms} Bedroom${place.number_rooms !== 1 ? 's' : ''}</div>
+              <div class="number_bathrooms">${place.number_bathrooms} Bathroom${place.number_bathrooms !== 1 ? 's' : ''}</div>
+            </div>
+            <div class="user">
+              <b>Owner:</b> ${user.first_name} ${user.last_name}
+            </div>
+            <div class="description">
+              ${place.description}
+            </div>
+          </article>`);
+          }
+        });
+      }
+    });
   });
 });
