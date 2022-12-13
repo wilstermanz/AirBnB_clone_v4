@@ -15,7 +15,7 @@ $(document).ready(function () {
     $('.amenities h4').html(names.join(', '));
   });
 
-// Checks api status
+  // Checks api status
   $.get('http://0.0.0.0:5001/api/v1/status/', function (data) {
     if (data.status === 'OK') {
       $('#api_status').addClass('available');
@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
   });
 
-// This loads in everything using only the api
+  // This loads in everything using only the api
   $.ajax({
     url: 'http://0.0.0.0:5001/api/v1/places_search/',
     type: 'POST',
@@ -59,9 +59,9 @@ $(document).ready(function () {
       });
     }
   });
-// This loads in everything with checked amenities using only the api
+  // This loads in everything with checked amenities using only the api
   $('button').on('click', function () {
-    console.log("hello");
+    console.log('hello');
     $('.places > article').remove();
     $.ajax({
       url: 'http://0.0.0.0:5001/api/v1/places_search/',
@@ -91,8 +91,10 @@ $(document).ready(function () {
             <div class="description">
               ${place.description}
             </div>
-          </article>`);}
-        })
-      }})
+          </article>`);
+          }
+        });
+      }
+    });
   });
 });
