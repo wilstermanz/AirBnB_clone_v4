@@ -28,7 +28,7 @@ $(function () {
 });
 
 // This loads in everything uing only the api
-$(document).ready(function() {
+$(document).ready(function () {
   $.ajax({
     url: 'http://0.0.0.0:5001/api/v1/places_search/',
     type: 'POST',
